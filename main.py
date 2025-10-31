@@ -1,6 +1,6 @@
 from task import Task
 from tasklist import TaskList
-VERSION = "v0.1.1"
+VERSION = "v0.1.2"
 
 def main():
     print(f"Welcome to TskTsk {VERSION}!")
@@ -10,15 +10,19 @@ def main():
     while True:
         cmd = input("> ").lower().strip()
         match (cmd):
+            # Display the list of commands
             case "help" | "h":
                 print("LIST: print list of tasks")
                 print("ADD : add task to list")
                 print("QUIT: quit program")
-            case "list" | "ls":
+            # Print the tasks in the task list
+            case "list" | "l":
                 print(tasklist)
+            # Add a new task to the task list
             case "add" | "a":
                 t = Task(input("Name of Task: "))
                 tasklist.add_task(t)
+            # Quit the program
             case "quit" | "q":
                 print('Quitting...')
                 break
