@@ -1,6 +1,6 @@
 from task import Task
 from tasklist import TaskList
-VERSION = "v0.2.0"
+VERSION = "v0.2.1"
 
 def main():
     print(f"Welcome to TskTsk {VERSION}!")
@@ -14,6 +14,8 @@ def main():
             case "help" | "h":
                 print("LIST: print list of tasks")
                 print("ADD : add task to list")
+                print("Complete: mark a task as complete")
+                print("DELETE: remove task from list")
                 print("QUIT: quit program")
             # Print the tasks in the task list
             case "list" | "l":
@@ -22,14 +24,19 @@ def main():
             case "add" | "a":
                 title = Task(input("Name of task: "))
                 tasklist.add_task(title)
-            # Remove a task from the task list
-            case "edit" | "c":
+            # Update the title of a task
+            case "edit" | "e":
                 title = input("Name of task: ")
                 new_title = input("New title: ")
                 tasklist.get_task(title).set_title(new_title)
+            # Remove a task from the task list
             case "delete" | "d":
                 title = input("Task to remove: ")
                 tasklist.remove_task(title)
+            # Mark a task as complete
+            case "complete" | "c":
+                title = input("Name of task:")
+                tasklist.get_task(title).mark_complete()
             # Quit the program
             case "quit" | "q":
                 print('Quitting...')
