@@ -1,11 +1,12 @@
 from task import Task
 from tasklist import TaskList
-VERSION = "v0.2.1"
+VERSION = "v0.3.0"
 
 def main():
     print(f"Welcome to TskTsk {VERSION}!")
     print("Type HELP for a list of commmands")
-    tasklist = TaskList()
+    
+    tasklist = TaskList.from_json()
 
     while True:
         cmd = input("> ").lower().strip()
@@ -35,11 +36,13 @@ def main():
                 tasklist.remove_task(title)
             # Mark a task as complete
             case "complete" | "c":
-                title = input("Name of task:")
+                title = input("Name of task: ")
                 tasklist.get_task(title).mark_complete()
-            # Quit the program
+            # Quit the program after saving
             case "quit" | "q":
-                print('Quitting...')
+                print("Saving...")
+                tasklist.to_json()
+                print("Quitting...")
                 break
             case _:
                 print("Invalid command format")
