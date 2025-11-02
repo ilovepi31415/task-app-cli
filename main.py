@@ -1,6 +1,6 @@
 from task import Task
 from tasklist import TaskList
-VERSION = "v0.3.1"
+VERSION = "v0.3.2"
 
 def main():
     print(f"Welcome to TskTsk {VERSION}!")
@@ -9,12 +9,14 @@ def main():
     tasklist = TaskList.from_json()
 
     while True:
+        # Split the input to allow for quick commands
         s = input("> ").lower().strip().split(maxsplit=1)
         cmd = s[0]
         if len(s) > 1:
             body = s[1]
         else:
             body = None
+
         match (cmd):
             # Display the list of commands
             case "help" | "h":
@@ -40,7 +42,9 @@ def main():
                 else:
                     title = input("Name of task: ")
                 new_title = input("New title: ")
-                tasklist.get_task(title).set_title(new_title)
+                task = tasklist.get_task(title)
+                if task:
+                    task.set_title(new_title)
             # Remove a task from the task list
             case "delete" | "d":
                 if body:
@@ -54,7 +58,12 @@ def main():
                     title = body
                 else:
                     title = input("Name of task: ")
-                tasklist.get_task(title).mark_complete()
+                task = tasklist.get_task(title)
+                if task:
+                    task.mark_complete()
+            # Save the tasklist without quititing
+            case "save" | "s":
+                tasklist.to_json()
             # Quit the program after saving
             case "quit" | "q":
                 print("Saving...")

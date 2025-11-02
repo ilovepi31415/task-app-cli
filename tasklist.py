@@ -30,22 +30,23 @@ class TaskList():
     
     def get_task(self, title: str) -> Task:
         try:
+            partial_match = []
             for task in self.tasks:
                 if task.get_title() == title:
                     return task
+                # If only one partial match, autocomplete the title
+                elif task.get_title().startswith(title):
+                    partial_match.append(task)
+            if len(partial_match) == 1:
+                return partial_match[0]
             raise Exception(f"Task {title} not found")
         except Exception as e:
             print(e)
 
     def remove_task(self, title: str) -> None:
-        try:
-            for task in self.tasks:
-                if task.get_title() == title:
-                    self.tasks.remove(task)
-                    return
-            raise Exception(f"Task {title} not in list")
-        except Exception as e:
-            print(e)
+        task = self.get_task(title)
+        if task:
+            self.tasks.remove(task)
     
     def to_json(self):
         json_dict = {}
