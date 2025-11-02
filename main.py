@@ -1,6 +1,6 @@
 from task import Task
 from tasklist import TaskList
-VERSION = "v0.3.2"
+VERSION = "v0.3.3"
 
 def main():
     print(f"Welcome to TskTsk {VERSION}!")
@@ -11,7 +11,10 @@ def main():
     while True:
         # Split the input to allow for quick commands
         s = input("> ").lower().strip().split(maxsplit=1)
-        cmd = s[0]
+        if s:
+            cmd = s[0]
+        else:
+            cmd = None
         if len(s) > 1:
             body = s[1]
         else:
@@ -20,11 +23,13 @@ def main():
         match (cmd):
             # Display the list of commands
             case "help" | "h":
-                print("LIST: print list of tasks")
-                print("ADD : add task to list")
-                print("Complete: mark a task as complete")
-                print("DELETE: remove task from list")
-                print("QUIT: quit program")
+                print("LIST    : print list of tasks")
+                print("ADD     : add task to list")
+                print("EDIT    : edit task title")
+                print("COMPLETE: mark a task as complete")
+                print("DELETE  : remove task from list")
+                print("SAVE    : save the tasklist")
+                print("QUIT    : quit program")
             # Print the tasks in the task list
             case "list" | "l":
                 print(tasklist)
@@ -42,9 +47,13 @@ def main():
                 else:
                     title = input("Name of task: ")
                 new_title = input("New title: ")
+                new_progress = input("Progress: ")
                 task = tasklist.get_task(title)
                 if task:
-                    task.set_title(new_title)
+                    if new_title:
+                        task.set_title(new_title)
+                    if new_progress.isdigit():
+                        task.set_progress(int(new_progress))
             # Remove a task from the task list
             case "delete" | "d":
                 if body:
