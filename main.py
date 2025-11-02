@@ -1,6 +1,6 @@
 from task import Task
 from tasklist import TaskList
-VERSION = "v0.3.0"
+VERSION = "v0.3.1"
 
 def main():
     print(f"Welcome to TskTsk {VERSION}!")
@@ -9,7 +9,12 @@ def main():
     tasklist = TaskList.from_json()
 
     while True:
-        cmd = input("> ").lower().strip()
+        s = input("> ").lower().strip().split(maxsplit=1)
+        cmd = s[0]
+        if len(s) > 1:
+            body = s[1]
+        else:
+            body = None
         match (cmd):
             # Display the list of commands
             case "help" | "h":
@@ -23,20 +28,32 @@ def main():
                 print(tasklist)
             # Add a new task to the task list
             case "add" | "a":
-                title = Task(input("Name of task: "))
-                tasklist.add_task(title)
+                if body:
+                    title = body
+                else:
+                    title = input("Name of task: ")
+                tasklist.add_task(Task(title))
             # Update the title of a task
             case "edit" | "e":
-                title = input("Name of task: ")
+                if body:
+                    title = body
+                else:
+                    title = input("Name of task: ")
                 new_title = input("New title: ")
                 tasklist.get_task(title).set_title(new_title)
             # Remove a task from the task list
             case "delete" | "d":
-                title = input("Task to remove: ")
+                if body:
+                    title = body
+                else:
+                    title = input("Task to remove: ")
                 tasklist.remove_task(title)
             # Mark a task as complete
             case "complete" | "c":
-                title = input("Name of task: ")
+                if body:
+                    title = body
+                else:
+                    title = input("Name of task: ")
                 tasklist.get_task(title).mark_complete()
             # Quit the program after saving
             case "quit" | "q":
